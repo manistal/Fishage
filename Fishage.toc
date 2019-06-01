@@ -1,0 +1,8 @@
+## Interface: 11302
+## Title: Fishage
+## Author: Fuzz [Miguel Nistal] (nistam328@gmail.com)
+## Notes: Fishing Tracker
+## Version: 0.1 
+## SavedVariables: FishageDB
+
+Fishage.xml

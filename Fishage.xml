@@ -1,0 +1,91 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <Script file="Fishage.lua"/>
+    <!-- Frame to handle all core events --> 
+    <Frame name="FishageRoot" enableMouse="false" movable="true" parent="UIParent" hidden="true">
+        <Scripts>
+            <OnLoad>
+                Fishage.OnLoad(self);
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <Frame name="FishageMeter" enableMouse="true" movable="true" resizable="true">
+        <Scripts>
+            <OnLoad>
+                self:RegisterForDrag("LeftButton")
+            </OnLoad>
+            <OnDragStart>
+                if not self.isLocked then
+                    self:StartMoving()
+                end
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+        <ResizeBounds>
+			<minResize>
+				<AbsDimension x="200" y="100"/>
+			</minResize>
+			<maxResize>
+				<AbsDimension x="800" y="400"/>
+			</maxResize>
+		</ResizeBounds>
+		<Frames>
+            <StatusBar>
+                <!--Size><RelDimension x="1.0" y="0.2" relativeTo="FishageMeter"/></Size-->
+                <Anchors><Anchor point="TOPLEFT" relativeTo="FishageMeter"/></Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture setAllPoints="true">
+                            <Color r="1.0" g="0.1" b="0.1" a="0.5" />
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </StatusBar>
+
+			<Button name="$parentResizeButton" parentKey="resizeButton">
+				<Size x="16" y="16"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="FishageMeter" x="0" y="0"/>
+				</Anchors>
+				<Scripts>
+					<OnMouseDown>
+						local chatFrame = self:GetParent();
+						self:SetButtonState("PUSHED", true);
+						--SetCursor("UI-Cursor-Size");	--Hide the cursor
+
+						self:GetHighlightTexture():Hide();
+						
+						chatFrame:StartSizing("BOTTOMRIGHT");
+					</OnMouseDown>
+					<OnMouseUp>
+						self:SetButtonState("NORMAL", false);
+						--SetCursor(nil); --Show the cursor again
+
+						self:GetHighlightTexture():Show();
+						
+						self:GetParent():StopMovingOrSizing();
+						FCF_SavePositionAndDimensions(self:GetParent());
+					</OnMouseUp>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up"/>
+				<HighlightTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Highlight"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Down"/>
+			</Button>
+
+        </Frames>
+        <!-- Tags below add a visual element to the frame. -->
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture setAllPoints="true">
+                    <Color r="0.1" g="0.1" b="0.1" a="0.5" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Size x="200" y="100" />
+        <Anchors><Anchor point="CENTER" relativeTo="UIParent"/></Anchors>
+    </Frame>
+
+</Ui>
