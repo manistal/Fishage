@@ -6,3 +6,4 @@
 ## SavedVariables: FishageDB
 
 Fishage.xml
+FishageCallbacks.lua

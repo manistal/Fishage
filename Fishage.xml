@@ -7,10 +7,13 @@
             <OnLoad>
                 Fishage.OnLoad(self);
             </OnLoad>
+            <OnEvent>
+                Fishage.OnEvent(self, event, ...);
+            </OnEvent>
         </Scripts>
     </Frame>
 
-    <Frame name="FishageMeter" enableMouse="true" movable="true" resizable="true">
+    <Frame name="FishageMeter" enableMouse="true" movable="true" resizable="true" hidden="true">
         <Scripts>
             <OnLoad>
                 self:RegisterForDrag("LeftButton")
