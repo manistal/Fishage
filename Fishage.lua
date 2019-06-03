@@ -19,9 +19,13 @@ Fishage.slashcmds[""] = function(msg, editBox)
 end
 
 Fishage.slashcmds["stats"] = function(msg, editBox)
-    local function log_pairs(k, v) Fishage.logger(" k="..k.." v="..tostring(v)) end
-    Fishage.logger("huh")
-    FLL.table.apply(Fishage.db.data.totals, log_pairs)
+    local SORT_DESCENDING = function(totals, fisha, fishb) return totals[fishb] < totals[fisha] end
+    index = 1
+    for fish, qty in FLL.table.sorted_iter(Fishage.db.data.totals, SORT_DESCENDING) do
+        local msg = string.format("%d\. %s : %d", index, fish, qty)
+        Fishage.logger(msg)
+        index = index + 1
+    end
 end
 
 
@@ -29,16 +33,6 @@ end
 -- Events
 -- 
 Fishage.eventHistory = {}
---Fishage.events["CHAT_MSG_LOOT"] = function(self, event, ...)
---    local text = select(1, ...) 
---    local playerName = select(2, ...)
---    local playerName2 = select(5, ...)
---    local itemId = string.match(text, ".*item:(%w+)::")
---    -- local itemName = string.match(text, ".*\[(%w+)\]|h|r")
---    Fishage.logger(" ID="..itemId)
---    -- Fishage.logger(" name="..itemName)
---end
-
 Fishage.db.log_catch = function(loot)
     local catch = loot.item
     local qty = loot.quantity 
