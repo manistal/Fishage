@@ -2,6 +2,8 @@
 -- Addon Initialization
 -- 
 Fishage = {}
+Fishage.db = {}
+Fishage.db.data = { sessions = {}, totals = {} }
 Fishage.events = {}
 Fishage.slashcmds = {}
 
@@ -17,15 +19,22 @@ Fishage.RegisterEvents = function(self)
     end
 end
 
+-- Load saved variables from addon memeory
+Fishage.events["PLAYER_LOGOUT"] = function(self)
+    FISHAGE_DATABASE = Fishage.db.data 
+end
+
 -- When addon loaded for the first time in the session
 Fishage.OnLoad = function(self)
     SendSystemMessage("Fishage 1.0 Loaded")
     Fishage.RegisterEvents(self)
+    if (FISHAGE_DATABASE ~= nil) then
+        Fishage.db.data = FISHAGE_DATABASE
+    end
 end
 
 -- Callback for all registered events 
 Fishage.OnEvent = function(self, event, ...)
-    SendSystemMessage(event)
     if (Fishage.events[event] ~= nil) then
         Fishage.events[event](self, event, ...)
     end

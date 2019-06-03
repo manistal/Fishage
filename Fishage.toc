@@ -3,8 +3,7 @@
 ## Author: Fuzz [Miguel Nistal] (nistam328@gmail.com)
 ## Notes: Fishing Tracker
 ## Version: 0.1 
-## SavedVariables: FishageDB
+## SavedVariables: FISHAGE_DATABASE
 
 FLL/libs.xml
-FishageInit.xml
 Fishage.xml
