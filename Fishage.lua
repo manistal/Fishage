@@ -1,49 +1,47 @@
 
---
--- Addon Initialization
 -- 
-Fishage = {};
-Fishage.RegisterEvents = function(self) 
-    for event_name, callback in pairs(Fishage.events) do
-        self:RegisterEvent(event_name)
-        SendSystemMessage(event_name)
-    end
+-- Meter show/hide functions
+-- 
+Fishage.slashcmds["hide"] = function(msg, editBox)
+    FishageMeter:Hide()
 end
 
-Fishage.OnLoad = function(self)
-    SendSystemMessage("Fishage 1.0 Loaded")
-    Fishage.RegisterEvents(self)
+Fishage.slashcmds["show"] = function(msg, editBox)
+    FishageMeter:Show()
 end
 
-Fishage.OnEvent = function(self, event, ...)
-    SendSystemMessage(event)
-    if (Fishage.events[event] ~= nil) then
-        Fishage.events[event](self, event, ...)
+Fishage.slashcmds[""] = function(msg, editBox)
+    if FishageMeter:IsShown() then
+        FishageMeter:Hide()
+    else
+        FishageMeter:Show()
     end
 end
 
 -- 
 -- Events
 -- 
-Fishage.events = {}
 Fishage.eventHistory = {}
 Fishage.events["CHAT_MSG_LOOT"] = function(self, event, ...)
     local text = select(1, ...) 
     local playerName = select(2, ...)
     local playerName2 = select(5, ...)
     local itemId = string.match(text, ".*item:(%w+)::")
-    local itemName = string.match(text, "[%w+]")
-    SendSystemMessage(" ID="..itemId.." name="..itemName)
+    local itemName = string.match(text, "\[(%w+)\]")
+    Fishage.logger(" ID="..itemId)
+    Fishage.logger(" name="..itemName)
     table.insert(Fishage.eventHistory, text)
-
-    -- Check if its a fish
-    if (FISHAGE_FISH_DATA[itemId] ~= nil) then
-        SendSystemMessage("Its a fish! "..FISHAGE_FISH_DATA[itemId]["Name"])
-    end
 end
 
-Fishage.events["LOOT_ITEM_AVAILABLE"] = function(self, event, ...)
-    local itemTooltip = select(1, ...)
-    local lootHandle = select(2, ...)
-    SendSystemMessage(" Tip="..itemTooltip.." lH="..lootHandle)
+-- https://wow.gamepedia.com/LOOT_OPENED
+-- https://wow.gamepedia.com/API_GetLootInfo
+-- https://wow.gamepedia.com/API_IsFishingLoot
+local function log_pairs(k, v) Fishage.logger(" k="..k.." v="..tostring(v)) end
+Fishage.events["LOOT_OPENED"] = function(self, event, ...)
+    if (not IsFishingLoot()) then return end 
+    local lootInfo = GetLootInfo()
+    FLL.table.apply(lootInfo, log_pairs)
+    -- SendSystemMessage(" Name="..lootInfo.name)
 end
+
+
