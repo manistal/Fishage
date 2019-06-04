@@ -3,6 +3,8 @@
 -- Stats Function - May one day be a UI!
 -- 
 Fishage.slashcmds["stats"] = function(msg, editBox)
+    Fishage.logger("Overall ")
+    Fishage.logger("==================================")
     local SORT_DESCENDING = function(totals, fisha, fishb) return totals[fishb] < totals[fisha] end
     index = 1
     for fish, qty in FLL.table.sorted_iter(Fishage.db.Totals.Overall, SORT_DESCENDING) do
@@ -10,6 +12,7 @@ Fishage.slashcmds["stats"] = function(msg, editBox)
         Fishage.logger(msg)
         index = index + 1
     end
+    Fishage.logger('\n')
 end
 
 Fishage.slashcmds["zstats"] = function(msg, editBox)
@@ -23,6 +26,7 @@ Fishage.slashcmds["zstats"] = function(msg, editBox)
             Fishage.logger(msg)
             index = index + 1
         end
+        Fishage.logger('\n')
     end
 end
 
