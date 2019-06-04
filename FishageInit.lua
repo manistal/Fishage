@@ -1,17 +1,26 @@
 --
+-- CONSTS
+-- 
+FISHAGE_DB_SCHEMA = { 
+    Sessions = {}, 
+    Totals = {
+        Overall = {},
+        byZone = {},
+        bySkill = {}
+    } 
+}
+
+--
 -- Addon Initialization
 -- 
 Fishage = {}
-Fishage.db = {}
-Fishage.db.data = { sessions = {}, totals = {} }
 Fishage.events = {}
 Fishage.slashcmds = {}
-
+Fishage.db = FLL.table.copy(FISHAGE_DB_SCHEMA)
 
 --
 -- Callbacks
 --
-
 -- RegisterEvents at OnLoad
 Fishage.RegisterEvents = function(self) 
     for event_name, callback in pairs(Fishage.events) do
@@ -21,13 +30,13 @@ end
 
 -- Load saved variables from addon memeory
 Fishage.events["PLAYER_LOGOUT"] = function(self)
-    FISHAGE_DATABASE = Fishage.db.data 
+    FISHAGE_DATABASE = Fishage.db
 end
 
 -- Load saved variables from addon memeory
 Fishage.events["ADDON_LOADED"] = function(self)
     if (FISHAGE_DATABASE ~= nil) then
-        Fishage.db.data = FISHAGE_DATABASE
+        Fishage.db = FISHAGE_DATABASE
     end
 end
 
